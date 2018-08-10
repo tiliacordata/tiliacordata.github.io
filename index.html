@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="sv">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="style.css" media="screen" />
+        <link rel="stylesheet" href="printstyle.css" media="print" />
+        <title>Placeringshjälpen</title>
+        <script>
+            function setUpRoom(){
+                var room = document.getElementById("room");
+                for (var i = 0; i < 121; i++){
+                    var seat = document.createElement("div");
+                    seat.className = "seat-unmarked";
+                    seat.addEventListener("click", onSeatClick);
+                    seat.ondragover = function(event){event.preventDefault()};
+                    seat.addEventListener("drop", onDrop);
+                    room.appendChild(seat);
+                }
+            }
+            
+            function onSeatClick(){
+                if(this.className == "seat-unmarked"){
+                    this.className = "seat-marked";
+                } else {
+                    this.className = "seat-unmarked";
+                }
+            }
+            
+            function onDrop(event){
+                event.preventDefault();
+                event.target.appendChild(document.getElementById(event.dataTransfer.getData("text")))
+            }
+            
+            var nameNo = 1;
+            
+            function addName(){
+                var name = document.getElementById("name-input").value;
+                var newName = document.createElement("p");
+                newName.className = "name-card";
+                newName.id = "name" + nameNo++;
+                newName.draggable = "true";
+                newName.ondragstart = function(event){event.dataTransfer.setData("text", event.target.id)};
+                newName.appendChild(document.createTextNode(name));
+                document.getElementById("name-list").appendChild(newName);
+                document.getElementById("name-input").value = "";
+                document.getElementById("name-input").focus();
+            }
+            
+            function onPrint(){
+                var documentTitle = document.getElementById("title-input").value;
+                document.getElementById("print-heading").innerHTML = documentTitle;
+                window.print();
+            }
+        </script>
+    </head>
+    <body onload="setUpRoom()">
+        <div id="page">
+            <header>
+                <h1>Placeringshjälpen</h1>
+                <p>Använd verktyget för att skapa bordsplacering i ditt rum. Markera sittplatser genom att klicka i rutnätet.</p>
+            </header>
+            <main>
+                <div id="name-section">
+                    <div id="add-name">
+                        <input type="text" id="name-input" />
+                        <button type="button" onclick="addName()">Lägg till</button>
+                    </div>
+                    <div id="name-list" ondragover="event.preventDefault()" ondrop="onDrop(event)"></div>
+                </div>
+                <div id="room-section">
+                    <h1 id="print-heading"></h1>
+                    <div id="room"></div>
+                    <div id="print-section">
+                        <p>Lägg till en rubrik: <input type ="text" id="title-input" /> <button type="button" onclick="onPrint()">Skriv ut</button></p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>

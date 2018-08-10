@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.seat-unmarked, .seat-marked {
+    width: 75px;
+    height: 50px;
+    float: right;
+}
+
+.seat-unmarked {
+    border: 1px solid lightgrey;
+}
+
+.seat-marked {
+    border: 1px solid black;
+}
+
+#page {
+    width: 1100px;
+    margin: 0 auto;
+}
+
+#room-section {
+    float: right;
+}
+
+#room {
+    width: 850px;
+}
+
+#name-list {
+    width: 200px;
+    min-height: 100px;
+    margin: 0px;
+    float: left;
+}
+
+#name-section {
+    float: left;
+}
+
+#print-section {
+    float: right;
+}
+
+#print-heading {
+    display: none;
+}
+
+div.seat-unmarked p.name-card,
+div.seat-marked p.name-card {
+    text-align: center;
+}
