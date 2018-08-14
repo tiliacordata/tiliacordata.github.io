@@ -1,0 +1,47 @@
+body {
+    font: 100% Arial, san-serif;
+    color: black;
+    background-color: #f0f0f0;
+    margin: 0;
+}
+
+header {
+    padding: 0.7em 1.2em;
+    background-color: white;
+}
+
+main {
+    padding: 0.3em 0.7em;
+}
+
+a {
+    border-radius: 0.5em;
+    padding: 0.7em;
+    margin: 0.5em;
+    display: block;
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    float: left;
+    width: 15em;
+    height: 17em;
+    transition: all 0.2s;
+}
+
+a:hover {
+    transform: scale(1.05);
+}
+
+p {
+    margin: 0;
+}
+
+img {   /* Ska ha förhållande 1:1,6 */
+    width: 15em;
+}
+
+.card-title {
+    font-size: 130%;
+    margin-top: 0.5em;
+    margin-bottom: 0.7em;
+}

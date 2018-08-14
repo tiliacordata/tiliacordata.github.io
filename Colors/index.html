@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="sv">
+    <head>
+        <meta charset="UTF-8">
+        <title>Min färgväljare</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="page">
+            <h1>Färgväljaren</h1>
+            <canvas id="color-canvas">Din webbläsare stödjer inte canvas-funktionen.</canvas>
+            <br />
+            
+            <p class="info-label">R:<span class="info-value" id="red-value"></span></p>
+            <p class="info-label">G:<span class="info-value" id="green-value"></span></p>
+            <p class="info-label">B:<span class="info-value" id="blue-value"></span></p>
+
+            <p>
+                <label for="slider-red">Röd</label>
+                <span class="color-slider">0<input type="range" min="0" max="255" id="slider-red" oninput="updateRed()">255</span>
+            </p>
+            <p>
+                <label for="slider-green">Grön</label>
+                <span class="color-slider">0<input type="range" min="0" max="255" id="slider-green" oninput="updateGreen()">255</span>
+            </p>
+            <p>
+                <label for="slider-blue">Blå</label>
+                <span class="color-slider">0<input type="range" min="0" max="255" id="slider-blue" oninput="updateBlue()">255</span>
+            </p>
+            
+            <script>
+                var red = document.getElementById("slider-red").value;
+                document.getElementById("red-value").innerHTML = red;
+                var green = document.getElementById("slider-green").value;
+                document.getElementById("green-value").innerHTML = green;
+                var blue = document.getElementById("slider-blue").value;
+                document.getElementById("blue-value").innerHTML = blue;
+                
+                var canvas = document.getElementById("color-canvas");
+                var context = canvas.getContext("2d");
+                context.fillStyle = "rgb(" + red + ", " + green + ", " + blue + ")";
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                
+                function updateRed(ev){
+                    var newValue = document.getElementById("slider-red").value;
+                    document.getElementById("red-value").innerHTML = newValue;
+                    updateCanvas();
+                }
+                
+                function updateGreen(ev){
+                    var newValue = document.getElementById("slider-green").value;
+                    document.getElementById("green-value").innerHTML = newValue;
+                    updateCanvas();
+                }
+                
+                function updateBlue(ev){
+                    var newValue = document.getElementById("slider-blue").value;
+                    document.getElementById("blue-value").innerHTML = newValue;
+                    updateCanvas();
+                }
+                
+                function updateCanvas(){
+                    var newRed = document.getElementById("slider-red").value;
+                    var newGreen = document.getElementById("slider-green").value;
+                    var newBlue = document.getElementById("slider-blue").value;
+                    context.fillStyle = "rgb(" + newRed + ", " + newGreen + ", " + newBlue + ")";
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                }
+            </script>
+            
+        </div> <!-- page -->
+    </body>
+</html>
