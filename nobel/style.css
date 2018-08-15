@@ -1,0 +1,26 @@
+body {
+    padding: 1em;
+}
+
+table {
+    width: 100%;
+    max-width: 800px;
+    background-color: rgb(250, 247, 188);
+}
+
+h1, h2, h3 {
+    font-family: Arial, san-serif;
+}
+
+h3 {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+td.name {
+    width: 25%;
+}
+
+.category-heading {
+    text-transform: capitalize;
+}

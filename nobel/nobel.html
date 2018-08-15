@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="sv">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <title>Nobelpriset</title>
+        <script>
+            function getInfo(){
+                document.getElementById("result").innerHTML = "";
+                const year = document.getElementById("year-input").value;
+                document.getElementById("year-input").value = "";
+                const url = "http://api.nobelprize.org/v1/prize.json?year=";
+                fetch(url + year)
+                    .then(resp => resp.json())
+                    .then(content => createTable(content));
+                document.getElementById("year-info").innerHTML = year;
+            }
+            
+            function createTable(jsonContent){
+                for(item in jsonContent.prizes){
+                    const tableHeading = document.createElement("h3");
+                    tableHeading.className  = "category-heading";
+                    const categoryInfo = document.createTextNode(jsonContent.prizes[item].category);
+                    tableHeading.appendChild(categoryInfo);
+                    document.getElementById("result").appendChild(tableHeading);
+                    const newTable = document.createElement("table");
+                    document.getElementById("result").appendChild(newTable);
+                    createTableEntries(jsonContent.prizes[item], newTable);
+                }
+            }
+            
+            function createTableEntries(prizeItem, table){
+                for(person in prizeItem.laureates){
+                    const laureate = prizeItem.laureates[person];
+                    const newRow = document.createElement("tr");
+                    table.appendChild(newRow);
+                    newRow.appendChild(createName(laureate));
+                    newRow.appendChild(createMotivation(laureate));
+                }
+            }
+            
+            function createName(laureate){
+                const nameInfo = document.createElement("td");
+                nameInfo.className = "name";
+                const name = document.createTextNode(laureate.firstname + " " + laureate.surname);
+                nameInfo.appendChild(name);
+                return nameInfo;
+            }
+            
+            function createMotivation(laureate){
+                const motivationInfo = document.createElement("td");
+                motivationInfo.className = "motivation";
+                const motivationRawInfo = laureate.motivation;
+                let motivation;
+                if(motivationRawInfo !== undefined){
+                    motivation = document.createTextNode(motivationRawInfo);
+                } else {
+                    motivation = document.createTextNode("-");
+                }
+                motivationInfo.appendChild(motivation);
+                return motivationInfo;
+            }
+            
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>Information om utdelade nobelpris</h1>
+        </header>
+        <main>
+            <p>Ange ett år: <input type="text" id="year-input"><button type="button" onclick="getInfo()">Visa</button></p>
+            <h2 id="year-info"></h2>
+            <div id="result"></div>
+        </main>
+    </body>
+</html>
