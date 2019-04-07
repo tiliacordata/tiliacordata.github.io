@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137497888-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137497888-1');
+    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=devise-width, initial-scale=1">
+    <title>Notes</title> 
+    <style>
+        #canvas {
+            border: 1px solid grey;
+        }
+        .content {
+            width: 600px;
+            margin: 0 auto;
+        }
+        .controls {
+            margin-top: 7px;
+        }
+    </style>
+    <script>
+        let ctx;
+        const canvasWidth = 500;
+        const canvasHeight = 600;
+        const padding = 15;
+        const cornerRadius = 10;
+        const canvasColor = "rgb(204, 255, 204)";
+        let index = -1;
+        const boxInfo = {
+            string: [],
+            x: [],
+            y: [],
+            width: [],
+            height: [],
+            size: []
+        }
+
+        function draw(){
+            ctx = document.getElementById("canvas").getContext("2d");
+            setUpListeners();
+            ctx.textBaseline = "top";
+            fillBackground();
+        }
+        
+        function setUpListeners(){
+            document.getElementById("canvas").addEventListener("mousedown", onCanvasMouseDown, false);
+            document.getElementById("canvas").addEventListener("mousemove", onCanvasMouseMove, false);
+            document.getElementById("canvas").addEventListener("mouseup", onCanvasMouseUp, false);
+            document.getElementById("use-button").addEventListener("click", handleUserString, false);
+        }
+        
+        function fillBackground(){
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            ctx.fillStyle = canvasColor;
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        }
+        
+        function handleUserString(){
+            const inputString = document.getElementById("userText").value;
+            const fontSize = parseInt(document.getElementById("size-select").value);
+            saveString(inputString, fontSize);
+            drawBoxes();
+        }
+        
+        function saveString(inputString, fontSize){
+            ctx.font = "" + fontSize + "px sans-serif";
+            const stringWidth = Math.ceil(ctx.measureText(inputString).width);
+            boxInfo.string.push(inputString);
+            boxInfo.x.push(5);
+            boxInfo.y.push(canvasHeight - (fontSize + 2 * padding + 5));
+            boxInfo.width.push(stringWidth + 2 * padding);
+            boxInfo.height.push(fontSize + 2 * padding);
+            boxInfo.size.push(fontSize);
+        }
+        
+        function drawBoxes(){
+            fillBackground();
+            for(let i = 0; i < boxInfo.string.length; i++){
+                drawBorder(boxInfo.string[i], boxInfo.x[i], boxInfo.y[i], boxInfo.width[i], boxInfo.height[i]);
+                drawText(boxInfo.string[i], boxInfo.x[i] + padding, boxInfo.y[i] + padding, boxInfo.size[i]);
+            }
+        }
+
+        function drawBorder(inputString, boxX, boxY, boxWidth, boxHeight){
+            ctx.beginPath();
+            ctx.moveTo(boxX + padding, boxY);
+            ctx.arcTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + padding, cornerRadius);
+            ctx.arcTo(boxX + boxWidth, boxY + boxHeight, boxX + boxWidth - padding, boxY + boxHeight, cornerRadius);
+            ctx.arcTo(boxX, boxY + boxHeight, boxX, boxY + boxHeight - padding, cornerRadius);
+            ctx.arcTo(boxX, boxY, boxX + padding, boxY, cornerRadius);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.fillStyle = "white";
+            ctx.fill();
+        }
+        
+        function drawText(inputString, textX, textY, fontSize){
+            ctx.font = "" + fontSize + "px sans-serif";
+            ctx.fillStyle = "black";
+            ctx.fillText(inputString, textX, textY);
+        }
+        
+        function onCanvasMouseDown(e){
+            const clickX = e.clientX - document.getElementById("canvas").getBoundingClientRect().left;
+            const clickY = e.clientY - document.getElementById("canvas").getBoundingClientRect().top;
+            
+            for(let i = boxInfo.string.length - 1; i >= 0 ; i--){
+                if(clickX > boxInfo.x[i] && clickX < boxInfo.x[i] + boxInfo.width[i] && clickY > boxInfo.y[i] && clickY < boxInfo.y[i] + boxInfo.height[i]){
+                    index = i;
+                    break;
+                }
+            }
+        }
+        
+        function onCanvasMouseMove(e){
+            if(index != -1){
+                boxInfo.x[index] += e.movementX;
+                boxInfo.y[index] += e.movementY;
+                drawBoxes();
+            }
+        }
+        
+        function onCanvasMouseUp(e){
+            index = -1;
+        }
+    </script>
+</head>
+<body onload="draw()">
+    <div class="content">
+        <canvas id="canvas" width="500" height="600">
+            There is some kind of board shown here
+        </canvas>
+        <div class="controls">
+            <input type="text" id="userText" />
+            <select id="size-select">
+                <option value="14">14px</option>
+                <option value="16">16px</option>
+                <option value="20">20px</option>
+                <option value="26">26px</option>
+                <option value="32">32px</option>
+                <option value="40">40px</option>
+            </select>
+            <button id="use-button">Använd</button>
+        </div>
+    </div>
+</body>
+</html>
