@@ -78,6 +78,14 @@ function populateAreaSelect(selectId, year) {
     document.getElementById(selectId).innerHTML = options;
 }
 
+function populatePartySelect(selectId) {
+    let options = "";
+    for(let party of partyListingOrder.riksdag) {
+        options += "<option value=" + party + ">" + partyNames[party].short + "</option>";
+    }
+    document.getElementById(selectId).innerHTML = options;
+}
+
 // function getPercent(part, total) {
 //     return Math.round((part / total) * 10000) / 100;
 // }

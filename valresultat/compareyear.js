@@ -3,6 +3,7 @@ function showAreaResult() {
     // document.getElementById("level-select").value = "kommun-riksdag";
     google.charts.setOnLoadCallback(drawSingleLevelResult);
     google.charts.setOnLoadCallback(drawDiffChart);
+    google.charts.setOnLoadCallback(drawPartyChart);
     // if (newAreaSelect.getResult().length > 0) {
     //     google.charts.setOnLoadCallback(drawDiffChart);
     // }
@@ -255,4 +256,105 @@ function setAreaInfo(areaConnections, yearEarlier, yearLater) {
     }
     areaInfo += "</ul>"
     document.getElementById("area-info").innerHTML = areaInfo;
+}
+
+function drawPartyChart() {
+    const yearFromSelect = document.getElementById("year-from-select");
+    const yearEarlier = yearFromSelect.options[yearFromSelect.selectedIndex].value;
+
+    const yearToSelect = document.getElementById("year-to-select");
+    const yearLater = yearToSelect.options[yearToSelect.selectedIndex].value;
+
+    const areaSelect = document.getElementById("area-select");
+    const selectedAreas = [areaSelect.options[areaSelect.selectedIndex].value];
+
+    const partySelect = document.getElementById("party-select");
+    const selectedParty = partySelect.options[partySelect.selectedIndex].value;
+
+    const areaConnections = getAreaConnectionsById(selectedAreas);
+
+    const comparisionItems = ["riksdag", "region", "kommun"];
+    const data = new google.visualization.DataTable();
+    data.addColumn('string', 'År');
+    for (let item of comparisionItems) {
+        data.addColumn('number', levelNames[item].short);
+    }
+
+    const resultRows = getPartyResultRows(areaConnections, yearEarlier, yearLater, selectedParty);
+
+    data.addRows(resultRows);
+
+    const percentFormatter = new google.visualization.NumberFormat({pattern: '#,##0.00%'});
+    for (let i = 1; i < data.getNumberOfColumns(); i++) {
+        percentFormatter.format(data, i);
+    }
+
+    const partyName = partyNames[selectedParty].long;
+
+    const colors = ['#f9ed06', '#7fd0e6', 'black'];
+
+    var options = {
+        height: 600,
+        width: 800,
+        title: 'Resultat för ' + partyName,
+        hAxis: {
+            title: 'Valår',
+            titleTextStyle: {italic: false}
+        },
+        vAxis: {
+            title: 'Resultat',
+            baseline: 0,
+            titleTextStyle: {italic: false},
+            format:'#,##0%'
+        },
+        colors: colors
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('party-chart'));
+    chart.draw(data, options);
+}
+
+function getPartyResultRows(areaConnections, yearEarlier, yearLater, party) {
+    const areaConnection = areaConnections[0];
+    const includedYears = [];
+    for(let i = parseInt(yearEarlier); i <= parseInt(yearLater); i += 4) {
+        includedYears.push(i);
+    }
+    const dataRows = [];
+    for(let year of includedYears) {
+        dataRows.push(getPartyResultRow(areaConnection.years[year.toString()], party, year));
+    }
+    return dataRows;
+}
+
+function getPartyResultRow(selectedAreas, party, year) {
+    let dataRow = [];
+    dataRow.push(year.toString());
+    const result = calculateTotalResult2(selectedAreas, party, year.toString());
+    for (let item of ["riksdag", "region", "kommun"]) {
+        dataRow.push(result[item] / result.validVotes[item]);
+    }
+    return dataRow;
+}
+
+function calculateTotalResult2(selectedAreas, party, year) {
+    const resultTotal = {
+        validVotes: {}
+    };
+
+    //const partyList = level !== "kommun" ? partyListingOrder.riksdag2022 : partyListingOrder.kommun2022;
+    for (let item of ["riksdag", "region", "kommun"]) {
+        resultTotal[item] = 0;
+        resultTotal.validVotes[item] = 0;
+    }
+
+    for (let area of selectedAreas) {
+        for (let item of ["riksdag", "region", "kommun"]) {
+            const areaLevelData = getYearAreaLevelDataEstablished(year, area, item);
+            resultTotal.validVotes[item] += areaLevelData.validVotes;
+            resultTotal[item] += areaLevelData.result[party];
+        }
+    }
+
+    return resultTotal;
 }

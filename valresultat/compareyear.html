@@ -53,11 +53,17 @@
         </select>
         <div id="info"></div>
         <div id="area-chart"></div>
+
+        <select id="party-select" class="large-select" onchange="drawPartyChart()">
+        </select>
+        <div id="party-chart"></div>
+
         <script>
             //let newAreaSelect;
             document.getElementById("header").innerHTML = commonHeader;
             document.getElementById("year-link").classList.add("active-link");
             populateAreaList();
+            populatePartySelect("party-select");
             showAreaResult();
             // newAreaSelect = new vanillaSelectBox("#area-select", {
             //     placeHolder: "Välj valdistrikt",
