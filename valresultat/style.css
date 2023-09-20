@@ -1,0 +1,147 @@
+* {
+    box-sizing: border-box;
+} 
+
+body {
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin: 0;
+}
+
+#page {
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 1rem;
+}
+
+h1 {
+    font: 1.5rem Arial, sans-serif;
+}
+
+.large-select {
+    font: 1.3rem Arial, sans-serif;
+    border-color: gray;
+    padding: 0.3rem;
+}
+
+.medium-select {
+    font: 1.1rem Arial, sans-serif;
+    border-color: gray;
+    padding: 0.3rem;
+    margin: 0.5rem 0;
+}
+
+select.large-select option {
+    font: 0.8rem Arial, sans-serif;
+}
+
+select.medium-select option {
+    font: 0.9rem Arial, sans-serif;
+}
+
+#nav-container {
+    border-width: 0 0 1px 0;
+    border-color: lightgray;
+    border-style: solid;
+    padding: 1rem;
+}
+
+nav {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-left: 1rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: purple;
+    font-size: x-large;
+    margin-right: 1rem;
+}
+
+.active-link {
+    border-width: 0 0 3px 0;
+    border-color: purple;
+    border-style: solid;
+}
+
+.chart-title {
+    font-weight: bold;
+}
+
+.chart-container {
+    padding-top: 1rem;
+}
+
+table {
+    margin: 1rem 0;
+}
+
+th {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.3rem 0.5rem;
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+td {
+    text-align: right;
+    padding: 0.3rem 0.5rem;
+}
+
+tr.section-header td {
+    text-align: left;
+    font-weight: bold;
+}
+
+.table-container {
+    padding: 0.7rem 0;
+}
+
+.first-cell {
+    text-align: left;
+}
+
+.sort-button {
+    float: right;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 15%;
+}
+.sort-button:hover {
+    background-color:lightgray;
+    transition: 0.3s;
+}
+
+/* tr:nth-child(even) {
+    background-color: rgb(243, 226, 243);
+} */
+
+.high-header-row {
+    height: 30px;
+}
+
+.high-header-cell {
+    background-color: white;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.9rem;
+}
+
+.zebra-row {
+    background-color: rgb(247, 237, 247);
+}
+
+.table-cell {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.9rem;
+}
+
+.selected-row,.hover-row {
+    background-color: rgb(232, 201, 232) !important;
+}
+
+ul {
+    list-style-type: none;
+}

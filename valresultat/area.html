@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="dataInterface.js"></script>
+    <script type="text/javascript" src="common.js"></script>
+    <script type="text/javascript" src="area.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', {packages: ['table', 'corechart', 'sankey'], language: 'sv'});
+    </script>
+    <title>Valdistrikt - MP Upplands Väsby</title>
+</head>
+<body onload="showAreaResult('apoteksskogen')">
+    <div id="header"></div>
+    <div id="page">
+        <select id="year-select" class="large-select" onchange="changeYear()">
+            <option value="2022" selected>2022</option>
+            <option value="2018">2018</option>
+            <option value="2014">2014</option>
+            <option value="2010">2010</option>
+            <option value="2006">2006</option>
+        </select>
+        <select id="area-select" class="large-select" onchange="showAreaResult(this.value)"></select>
+        <h2>Röstberättigade och valdeltagande</h2>
+        <div id="participation-info" class="table-container"></div>
+        <div id="non-eligible-info"></div>
+        <h2>Resultat</h2>
+        <div id="area-result"  class="table-container"></div>
+        <h2>Jämförelse</h2>
+        <select id="level-select" class="medium-select" onchange="updateLevelComparision()"> 
+            <option value="kommun-riksdag" selected>Kommun - Riksdag</option>
+            <option value="region-riksdag">Region - Riksdag</option>
+            <option value="kommun-region">Kommun - Region</option>
+        </select>
+        <div id="comparision-table-title" class="chart-title"></div>
+        <div id="comparision-table"  class="table-container"></div>
+        <div id="sankey-title" class="chart-title"></div>
+        <div id="area-sankey" class="chart-container"></div>
+        <div id="sankey-title-2" class="chart-title"></div>
+        <div id="area-sankey-2" class="chart-container"></div>
+        <script>
+
+            document.getElementById("header").innerHTML = commonHeader;
+            document.getElementById("single-link").classList.add("active-link");
+            populateAreaSelect("area-select", getSelectedYear());
+
+        </script>
+    </div>
+</body>
+</html>

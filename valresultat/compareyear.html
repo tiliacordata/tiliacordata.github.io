@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="areaYearConnections.js"></script>
+    <script type="text/javascript" src="dataInterface.js"></script>
+    <script type="text/javascript" src="common.js"></script>
+    <script type="text/javascript" src="compareyear.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="library/vanillaSelectBox.css">
+    <script src="library/vanillaSelectBox.js"></script>
+    <script>
+        google.charts.load('current', {packages: ['corechart'], language: 'sv'});
+    </script>
+    <title>Jämför år - MP Upplands Väsby</title>
+</head>
+<body>
+    <div id="header"></div>
+    <div id="page">
+        <select id="year-from-select" class="large-select" onchange="populateAreaList()">
+            <option value="2018" selected>2018</option>
+            <option value="2014">2014</option>
+            <option value="2010">2010</option>
+            <option value="2006">2006</option>
+        </select>
+        <select id="year-to-select" class="large-select" onchange="populateAreaList()">
+            <option value="2022" selected>2022</option>
+            <option value="2018">2018</option>
+            <option value="2014">2014</option>
+            <option value="2010">2010</option>
+        </select>
+        <!--<select id="area-select" class="large-select" onchange="showAreaResult()" multiple></select>-->
+        <select id="area-select" class="large-select" onchange="showAreaResult()"></select>
+        <div id=area-info></div>
+        <div>
+            <h2>Valresultat</h2>
+            <select id="level-select-single-level" class="medium-select" onchange="showLevelResult()">
+                <option value="kommun" selected>Kommun</option>
+                <option value="region">Region</option>
+                <option value="riksdag">Riksdag</option>
+            </select>
+            <div id="single-level-result"></div>
+        </div>
+        <h2>Jämförelse</h2>
+        <select id="level-select" class="medium-select" onchange="showAreaResult()"> 
+            <option value="kommun-riksdag" selected>Kommun - Riksdag</option>
+            <option value="region-riksdag">Region - Riksdag</option>
+            <option value="kommun-region">Kommun - Region</option>
+        </select>
+        <div id="info"></div>
+        <div id="area-chart"></div>
+        <script>
+            //let newAreaSelect;
+            document.getElementById("header").innerHTML = commonHeader;
+            document.getElementById("year-link").classList.add("active-link");
+            populateAreaList();
+            showAreaResult();
+            // newAreaSelect = new vanillaSelectBox("#area-select", {
+            //     placeHolder: "Välj valdistrikt",
+            //     translations: {
+            //         all: "Alla",
+            //         selectAll: "Markera alla",
+            //         clearAll: "Rensa alla val"
+            //     },
+            //     itemsSeparator: ", "
+            // });
+
+        </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="common.js"></script>
+    <title>Info - MP Upplands Väsby</title>
+</head>
+<body>
+    <div id="header"></div>
+    <div id="page">
+        <p>Den här webbsidan sammanställer information om valresultat i Upplands Väsby.</p>
+        <p>Tabellerna går att sortera genom att klicka på kolumnrubrikerna. Genom att klicka på en partibeteckning bredvid ett diagram kan man markera ett partis resultat för att göra det lättare att skilja ut.</p>
+        <p>Valresultat på valdistriktsnivå har tagits med tillbaka till 2006. För 2022 visas Partiet Nyans separat på några ställen, på andra ingår partiet bland övriga partier.</p>
+        <p>För övriga år redovisas inga mindre partier separat, utan alla ingår i övriga partier.</p>
+        <p>Nedan finns länkar till kartor som visar var de olika valdistrikten ligger.</p>
+        <ul>
+            <li>2022: <a href="https://valresultat.svt.se/2022/riksdagsval-0114-upplands-vasby.html">Svt</a></li>
+            <li>2018: <a href="https://historik.val.se/val/val2018/karta/R/kommun/01/14/karta.html">Valmyndigheten</a></li>
+            <li>2014: <a href="https://historik.val.se/val/val2014/karta/R/kommun/01/14/karta.html">Valmyndigheten</a> (Välj en valkrets för att se valdistrikt)</li>
+            <li>2010: <a href="https://historik.val.se/val/val2010/karta/R/kommun/01/14/karta.html">Valmyndigheten</a> (Välj en valkrets för att se valdistrikt)</li>
+            <li>2006: <a href="https://historik.val.se/val/val2006/slutlig/R/kommun/01/14/karta.html">Valmyndigheten</a> (Välj en valkrets för att se valdistrikt)</li>
+        </ul>
+        <script>
+            document.getElementById("header").innerHTML = commonHeader;
+            document.getElementById("info-link").classList.add("active-link");
+        </script>
+    </div>
+</body>
+</html>

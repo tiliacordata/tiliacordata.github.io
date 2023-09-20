@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="common.js"></script>
+    <script type="text/javascript" src="municipality.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', {packages: ['corechart'], language: 'sv'});
+    </script>
+    <title>Kommunen - MP Upplands Väsby</title>
+</head>
+<body>
+    <div id="header"></div>
+    <div id="page">
+        <h1>Upplands Väsby</h1>
+        <div>
+            <h2>Valresultat</h2>
+            <select id="level-select" class="medium-select" onchange="showLevelResult()">
+                <option value="kommun" selected>Kommun</option>
+                <option value="region">Region</option>
+                <option value="riksdag">Riksdag</option>
+            </select>
+            <div id="level-election-result"></div>
+        </div>
+        <div>
+            <h2>Valdeltagande</h2>
+            <div id="participation-chart"></div>
+        </div>
+        <div>
+            <h2>Röstberättigade</h2>
+            <div id="number-eligible-chart"></div>
+        </div>
+        
+        <script>
+            document.getElementById("header").innerHTML = commonHeader;
+            document.getElementById("municipality-link").classList.add("active-link");
+
+            google.charts.setOnLoadCallback(drawLevelElectionResult);
+            google.charts.setOnLoadCallback(drawParticipationChart);
+            google.charts.setOnLoadCallback(drawNumberEligibleChart);
+
+        </script>
+    </div>
+</body>
+</html>

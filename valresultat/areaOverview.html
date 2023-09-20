@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="dataInterface.js"></script>
+    <script type="text/javascript" src="areaOverview.js"></script>
+    <script type="text/javascript" src="common.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', {packages: ['table'], language: 'sv'});
+        google.charts.setOnLoadCallback(drawParticipationTable);
+    </script>
+    <title>Översikt valdistrikt - MP Upplands Väsby</title>
+</head>
+<body>
+    <div id="header"></div>
+    <div id="page">
+    <select id="year-select" class="large-select" onchange="changeYear()">
+        <option value="2022" selected>2022</option>
+        <option value="2018">2018</option>
+        <option value="2014">2014</option>
+        <option value="2010">2010</option>
+        <option value="2006">2006</option>
+    </select>
+    <div>
+        <h2>Valresultat</h2>
+        <select id="level-select" class="medium-select" onchange="showLevelResult()">
+            <option value="kommun" selected>Kommun</option>
+            <option value="region">Region</option>
+            <option value="riksdag">Riksdag</option>
+        </select>
+        <div>Tabellen redovisar andel och antal</div>
+        <div class="table-container" id="municipality-result-div"></div>
+    </div>
+    <div>
+        <h2>Röstberättigade och valdeltagande</h2>
+        <div>Tabellen redovisar andel och antal</div>
+        <div>"Ej röstberättigade riksdag" är andelen av personerna som har rösträtt i valen till kommun- och regionfullmäktige som inte har det i riksdagsvalet.</div>
+        <div class="table-container" id="participation-table-div"></div>
+    </div>
+
+        <script>
+            
+            document.getElementById("header").innerHTML = commonHeader;
+            document.getElementById("all-link").classList.add("active-link");
+
+            google.charts.setOnLoadCallback(drawResultTable);
+            google.charts.setOnLoadCallback(drawParticipationTable);
+
+        </script>
+    </div>
+</body>
+</html>

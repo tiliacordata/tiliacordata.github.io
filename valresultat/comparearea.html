@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="common.js"></script>
+    <title>Jämför valdistrikt - MP Upplands Väsby</title>
+</head>
+<body>
+    <div id="header"></div>
+    <div id="page">
+        <select id="year-select" class="large-select" onchange="changeYear()">
+            <option value="2022" selected>2022</option>
+            <option value="2018">2018</option>
+            <option value="2014">2014</option>
+            <option value="2010">2010</option>
+            <option value="2006">2006</option>
+        </select>    
+        <div>
+            <select id="area-select-1"></select>
+            <select id="area-select-2"></select>
+            <select id="area-select-3"></select>
+            <select id="area-select-4"></select>
+            <select id="area-select-5"></select>
+            <select id="area-select-6"></select>
+            <div>
+                <span>Inkludera:</span>
+                <input type="checkbox" id="include-kommun" value="includeKommun" checked />
+                <label for="include-kommun">Kommun</label>
+                <input type="checkbox" id="include-region" value="includeRegion" checked />
+                <label for="include-region">Region</label>
+                <input type="checkbox" id="include-riksdag" value="includeRiksdag" checked />
+                <label for="include-riksdag">Riksdag</label>
+            </div>
+            <input type="checkbox" id="sum-areas" value="sumAreas" checked />
+            <label for="sum-areas">Summera</label>
+            <button onclick="populateComparisionView()">Jämför</button>
+        </div>
+        <div id="comparisionResult"></div>
+        <script>
+
+        document.getElementById("header").innerHTML = commonHeader;
+        document.getElementById("compare-link").classList.add("active-link");
+        populateSelects();
+
+        function populateSelects() {
+            let selectedYear = getSelectedYear();
+            populateNoDefaultAreaSelect("area-select-1", selectedYear);
+            populateNoDefaultAreaSelect("area-select-2", selectedYear);
+            populateNoDefaultAreaSelect("area-select-3", selectedYear);
+            populateNoDefaultAreaSelect("area-select-4", selectedYear);
+            populateNoDefaultAreaSelect("area-select-5", selectedYear);
+            populateNoDefaultAreaSelect("area-select-6", selectedYear);
+        }
+
+        function changeYear() {
+            populateSelects();
+        }
+
+        const comparisionPartyNames = {
+            "mp": "Miljöpartiet",
+            "s": "Socialdemokraterna",
+            "sd": "Sverigedemokraterna",
+            "v": "Vänsterpartiet",
+            "m": "Moderaterna",
+            "c": "Centerpartiet",
+            "l": "Liberalerna",
+            "kd": "Kristdemokraterna",
+            "pny": "Partiet Nyans",
+            "ovr": "Övriga"
+        }
+
+        function populateNoDefaultAreaSelect(selectId, year) {
+            let options = "<option value=''>Välj eller lämna tom</option>";
+            for(let area of Object.keys(data[year])) {
+                options += "<option value=" + area + ">" + data[year][area].name + "</option>";
+            }
+            document.getElementById(selectId).innerHTML = options;
+        }
+
+        function populateComparisionView() {
+            const selectedAreas = getSelectedAreas();
+            const options = {
+                sumAreas: document.getElementById("sum-areas").checked,
+                includeKommun: document.getElementById("include-kommun").checked,
+                includeRegion: document.getElementById("include-region").checked,
+                includeRiksdag: document.getElementById("include-riksdag").checked
+
+            };
+            document.getElementById("comparisionResult").innerHTML = createComparisionView(data, selectedAreas, getSelectedYear(), options);
+        }
+
+        function getSelectedAreas() {
+            const select1 = document.getElementById("area-select-1");
+            const area1 = select1.options[select1.selectedIndex].value;
+            const select2 = document.getElementById("area-select-2");
+            const area2 = select2.options[select2.selectedIndex].value;
+            const select3 = document.getElementById("area-select-3");
+            const area3 = select3.options[select3.selectedIndex].value;
+            const select4 = document.getElementById("area-select-4");
+            const area4 = select4.options[select4.selectedIndex].value;
+            const select5 = document.getElementById("area-select-5");
+            const area5 = select5.options[select5.selectedIndex].value;
+            const select6 = document.getElementById("area-select-6");
+            const area6 = select6.options[select6.selectedIndex].value;
+            const selectValues = [area1, area2, area3, area4, area5, area6];
+            const selectedAreas = selectValues.filter(area => area !== "");
+            return selectedAreas;
+        }
+
+        function createComparisionView(allData, selectedAreas, year, options) {
+            const yearData = allData[year];
+            let view = "<table><tr><th></th>";
+            for (let area of selectedAreas) {
+                view += headerCell(yearData[area].name);
+            }
+            view += options.sumAreas ? headerCell("Samtliga valda områden") : "";
+            view += "</tr>";
+            view += options.includeKommun ? getComparisionResultRows(yearData, selectedAreas, "kommun", options) : "";
+            view += options.includeRegion ? getComparisionResultRows(yearData, selectedAreas, "region", options) : "";
+            view += options.includeRiksdag ? getComparisionResultRows(yearData, selectedAreas, "riksdag", options) : "";
+            view += options.includeKommun ? getComparisionInfoRows(yearData, selectedAreas, "kommun", options) : "";
+            view += options.includeRegion ? getComparisionInfoRows(yearData, selectedAreas, "region", options) : "";
+            view += options.includeRiksdag ? getComparisionInfoRows(yearData, selectedAreas, "riksdag", options) : "";
+            view += getAreaInfoRows(yearData, selectedAreas, options)
+            view += "</table>";
+            return view;
+        }
+
+        function getComparisionResultRows(allData, selectedAreas, level, options) {
+            let rows = "<tr class='section-header'><td colspan='" + getColSpan(selectedAreas, options) +"'>" + levelNames[level].short + ", resultat</td></tr>";
+            const dataObjects = createResultDataObjects(allData, selectedAreas, level);
+            for (let party of Object.keys(partyNames)) {
+                if (party === "vb" && (level === "region" || level === "riksdag")) {
+                    continue;
+                }
+                rows += getPartyResultRow(dataObjects, party, options);
+            }
+            return rows;
+        }
+
+        function getPartyResultRow(dataObjects, party, options) {
+            let rowContent = cell(partyNames[party].long, "first-cell");
+            for (let areaObject of dataObjects) {
+                rowContent += cell(getPercent2Digit(areaObject.result[party], areaObject.validVotes) + "% (" + areaObject.result[party] + ")");
+            }
+            if(options.sumAreas) {
+                rowContent += cell(getPercent2Digit(dataObjects.reduce((acc, current) => acc + current.result[party], 0), dataObjects.reduce((acc, current) => acc + current.validVotes, 0)) 
+                + "% (" + dataObjects.reduce((acc, current) => acc + current.result[party], 0) + ")");
+            }
+            return row(rowContent);
+        }
+
+        function getComparisionInfoRows(allData, selectedAreas, level, options) {
+            let rows = "<tr class='section-header'><td colspan='" + getColSpan(selectedAreas, options) +"'>" + levelNames[level].short + ", info</td></tr>";
+            const dataObjects = createComparisionInfoDataObjects(allData, selectedAreas, level);
+            rows += getEligibleInfoRow(dataObjects, options);
+            rows += getParticipationInfoRow(dataObjects, options);
+            rows += getDidNotVoteInfoRow(dataObjects, options);
+            rows += getInvalidVotesInfoRow(dataObjects, options);
+            return rows;
+        }
+
+        function createComparisionInfoDataObjects(allData, selectedAreas, level) {
+            const dataObjects = [];
+            for (let area of selectedAreas) {
+                dataObjects.push({
+                    name: allData[area].name,
+                    level: level,
+                    eligibleVoters: allData[area][level].eligibleVoters,
+                    participatingVoters: allData[area][level].participatingVoters,
+                    validVotes: allData[area][level].validVotes
+                });
+            }
+            return dataObjects;
+        }
+
+        function getEligibleInfoRow(dataObjects, options) {
+            let rowContent = cell("Röstberättigade", "first-cell");
+            for (let areaObject of dataObjects) {
+                rowContent += cell(areaObject.eligibleVoters);
+            }
+            if(options.sumAreas) {
+                rowContent += cell(dataObjects.reduce((acc, current) => acc + current.eligibleVoters, 0));
+            }
+            return row(rowContent);
+        }
+
+        function getParticipationInfoRow(dataObjects, options) {
+            let rowContent = cell("Valdeltagande", "first-cell");
+            for (let areaObject of dataObjects) {
+                rowContent += cell(getPercent2Digit(areaObject.participatingVoters, areaObject.eligibleVoters) + "% (" + areaObject.participatingVoters + ")");
+            }
+            if(options.sumAreas) {
+                rowContent += cell(getPercent2Digit(dataObjects.reduce((acc, current) => acc + current.participatingVoters, 0), dataObjects.reduce((acc, current) => acc + current.eligibleVoters, 0)) 
+                + "% (" + dataObjects.reduce((acc, current) => acc + current.participatingVoters, 0) + ")");
+            }
+            return row(rowContent);
+        }
+
+        function getDidNotVoteInfoRow(dataObjects, options) {
+            let rowContent = cell("Röstade ej", "first-cell");
+            for (let areaObject of dataObjects) {
+                const numberDidNotVote = areaObject.eligibleVoters - areaObject.participatingVoters;
+                rowContent += cell(getPercent2Digit(numberDidNotVote, areaObject.eligibleVoters) + "% (" + numberDidNotVote + ")");
+            }
+            if(options.sumAreas) {
+                rowContent += cell(getPercent2Digit(dataObjects.reduce((acc, current) => acc + (current.eligibleVoters - current.participatingVoters), 0), dataObjects.reduce((acc, current) => acc + current.eligibleVoters, 0)) 
+                + "% (" + dataObjects.reduce((acc, current) => acc + (current.eligibleVoters - current.participatingVoters), 0) + ")");
+            }
+            return row(rowContent);
+        }
+
+        function getInvalidVotesInfoRow(dataObjects, options) {
+            let rowContent = cell("Ogiltiga röster", "first-cell");
+            for (let areaObject of dataObjects) {
+                const numberInvalidVotes = areaObject.participatingVoters - areaObject.validVotes;
+                rowContent += cell(getPercent2Digit(numberInvalidVotes, areaObject.participatingVoters) + "% (" + numberInvalidVotes + ")");
+            }
+            if(options.sumAreas) {
+                rowContent += cell(getPercent2Digit(dataObjects.reduce((acc, current) => acc + (current.participatingVoters - current.validVotes), 0), dataObjects.reduce((acc, current) => acc + current.validVotes, 0)) 
+                + "% (" + dataObjects.reduce((acc, current) => acc + (current.participatingVoters - current.validVotes), 0) + ")");
+            }
+            return row(rowContent);
+        }
+
+        function getAreaInfoRows(allData, selectedAreas, options) {
+            let rows = "<tr class='section-header'><td colspan='" + getColSpan(selectedAreas, options) +"'>Info</td></tr>";
+            const dataObjects = createAreaInfoDataObjects(allData, selectedAreas);
+            rows += getIneligibleVotersInfoRow(dataObjects, options);
+            return rows;
+        }
+
+        function createAreaInfoDataObjects(allData, selectedAreas) {
+            const dataObjects = [];
+            for (let area of selectedAreas) {
+                dataObjects.push({
+                    name: allData[area].name,
+                    eligibleVotersRiksdag: allData[area].riksdag.eligibleVoters,
+                    eligibleVotersKommun: allData[area].kommun.eligibleVoters
+                });
+            }
+            return dataObjects;
+        }
+
+        function getIneligibleVotersInfoRow(dataObjects, options) {
+            let rowContent = cell("Ej rösträtt i riksdagsval", "first-cell");
+            for (let areaObject of dataObjects) {
+                const numberIneligibleVoters = areaObject.eligibleVotersKommun - areaObject.eligibleVotersRiksdag;
+                rowContent += cell(getPercent2Digit(numberIneligibleVoters, areaObject.eligibleVotersKommun) + "% (" + numberIneligibleVoters + ")");
+            }
+            if(options.sumAreas) {
+                rowContent += cell(getPercent2Digit(dataObjects.reduce((acc, current) => acc + (current.eligibleVotersKommun - current.eligibleVotersRiksdag), 0), dataObjects.reduce((acc, current) => acc + current.eligibleVotersKommun, 0)) 
+                + "% (" + dataObjects.reduce((acc, current) => acc + (current.eligibleVotersKommun - current.eligibleVotersRiksdag), 0) + ")");
+            }
+            return row(rowContent);
+        }
+
+        function getColSpan(selectedAreas, options) {
+            return selectedAreas.length + 1 + (options.sumAreas ? 1 : 0);
+        }
+
+        </script>
+    </div>
+</body>
+</html>
