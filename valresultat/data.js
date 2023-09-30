@@ -409,6 +409,282 @@ const data = {
             }
         }
     },
+    "countryTotal": {
+        "2022": {
+            "riksdag": {
+                "result": {
+                    "mp": 329242,
+                    "s": 1964474,
+                    "sd": 1330325,
+                    "v": 437050,
+                    "m": 1237428,
+                    "c": 434945,
+                    "l": 298542,
+                    "kd": 345712,
+                    "ovr": 100252
+                },
+                "eligibleVoters": 7775390,
+                "participatingVoters": 6547801,
+                "validVotes": 6477970
+            },
+        },
+        "2018": {
+            "riksdag": {
+                "result": {
+                    "mp": 285899,
+                    "s": 1830386,
+                    "sd": 1135627,
+                    "v": 518454,
+                    "m": 1284698,
+                    "c": 557500,
+                    "l": 355546,
+                    "kd": 409478,
+                    "ovr": 99137
+                },
+                "eligibleVoters": 7495936,
+                "participatingVoters": 6535271,
+                "validVotes": 6476725
+            },
+        },
+        "2014": {
+            "riksdag": {
+                "result": {
+                    "mp": 429275,
+                    "s": 1932711,
+                    "sd": 801178,
+                    "v": 356331,
+                    "m": 1453517,
+                    "c": 380937,
+                    "l": 337773,
+                    "kd": 284806,
+                    "ovr": 255045
+                },
+                "eligibleVoters": 7330432,
+                "participatingVoters": 6290016,
+                "validVotes": 6231573
+            },
+        },
+        "2010": {
+            "riksdag": {
+                "result": {
+                    "mp": 437435,
+                    "s": 1827497,
+                    "sd": 339610,
+                    "v": 334053,
+                    "m": 1791766,
+                    "c": 390804,
+                    "l": 420524,
+                    "kd": 333696,
+                    "ovr": 85023
+                },
+                "eligibleVoters": 7123651,
+                "participatingVoters": 6028682,
+                "validVotes": 5960408
+            },
+        },
+        "2006": {
+            "riksdag": {
+                "result": {
+                    "mp": 291121,
+                    "s": 1942625,
+                    "sd": 162463,
+                    "v": 324722,
+                    "m": 1456014,
+                    "c": 437389,
+                    "l": 418395,
+                    "kd": 365998,
+                    "ovr": 152551
+                },
+                "eligibleVoters": 6892009,
+                "participatingVoters": 5650416,
+                "validVotes": 5551278
+            },
+        },
+    },
+    "stockholmsLanTotal": {
+        "2022": {
+            "riksdag": {
+                "result": {
+                    "mp": 42284,
+                    "s": 223056,
+                    "sd": 144315,
+                    "v": 51623,
+                    "m": 197466,
+                    "c": 60776,
+                    "l": 48949,
+                    "kd": 40207,
+                    "ovr": 13836
+                },
+                "eligibleVoters": 1006456,
+                "participatingVoters": 830207,
+                "validVotes": 822512
+            },
+        },
+        "2018": {
+            "riksdag": {
+                "result": {
+                    "mp": 39042,
+                    "s": 187924,
+                    "sd": 124226,
+                    "v": 56466,
+                    "m": 212009,
+                    "c": 69786,
+                    "l": 56525,
+                    "kd": 56884,
+                    "ovr": 12169
+                },
+                "eligibleVoters": 947622,
+                "participatingVoters": 820787,
+                "validVotes": 815031
+            },
+        },
+        "2014": {
+            "riksdag": {
+                "result": {
+                    "mp": 59586,
+                    "s": 183738,
+                    "sd": 74136,
+                    "v": 35722,
+                    "m": 249616,
+                    "c": 38898,
+                    "l": 53766,
+                    "kd": 40492,
+                    "ovr": 28241
+                },
+                "eligibleVoters": 900574,
+                "participatingVoters": 770186,
+                "validVotes": 764195
+            },
+        },
+        "2010": {
+            "riksdag": {
+                "result": {
+                    "mp": 53788,
+                    "s": 159222,
+                    "sd": 29886,
+                    "v": 31617,
+                    "m": 286249,
+                    "c": 41369,
+                    "l": 59461,
+                    "kd": 44880,
+                    "ovr": 9877
+                },
+                "eligibleVoters": 850629,
+                "participatingVoters": 722800,
+                "validVotes": 716349
+            },
+        },
+        "2006": {
+            "riksdag": {
+                "result": {
+                    "mp": 36365,
+                    "s": 171901,
+                    "sd": 12471,
+                    "v": 31161,
+                    "m": 252100,
+                    "c": 34998,
+                    "l": 60178,
+                    "kd": 43792,
+                    "ovr": 14258
+                },
+                "eligibleVoters": 804300,
+                "participatingVoters": 667030,
+                "validVotes": 657224
+            },
+        },
+    },
+    "regionStockholmTotal": {
+        "2022": {
+            "region": {
+                "result": {
+                    "mp": 54587,
+                    "s": 476525,
+                    "sd": 154734,
+                    "v": 167214,
+                    "m": 291363,
+                    "c": 84489,
+                    "l": 86968,
+                    "kd": 95506,
+                    "ovr": 32620
+                },
+                "eligibleVoters": 1869643,
+                "participatingVoters": 1461096,
+                "validVotes": 1444006
+            },
+        },
+        "2018": {
+            "region": {
+                "result": {
+                    "mp": 81404,
+                    "s": 379008,
+                    "sd": 140773,
+                    "v": 152784,
+                    "m": 321783,
+                    "c": 115785,
+                    "l": 115746,
+                    "kd": 111877,
+                    "ovr": 25627
+                },
+                "eligibleVoters": 1772086,
+                "participatingVoters": 1460298,
+                "validVotes": 1444787
+            },
+        },
+        "2014": {
+            "region": {
+                "result": {
+                    "mp": 135992,
+                    "s": 358324,
+                    "sd": 79452,
+                    "v": 104479,
+                    "m": 381667,
+                    "c": 58906,
+                    "l": 111676,
+                    "kd": 75529,
+                    "ovr": 49587
+                },
+                "eligibleVoters": 1681191,
+                "participatingVoters": 1369881,
+                "validVotes": 1355612
+            },
+        },
+        "2010": {
+            "region": {
+                "result": {
+                    "mp": 121660,
+                    "s": 321268,
+                    "sd": 35496,
+                    "v": 77578,
+                    "m": 460871,
+                    "c": 47956,
+                    "l": 116858,
+                    "kd": 59273,
+                    "ovr": 13884
+                },
+                "eligibleVoters": 1566055,
+                "participatingVoters": 1270809,
+                "validVotes": 1254844
+            },
+        },
+        "2006": {
+            "region": {
+                "result": {
+                    "mp": 74837,
+                    "s": 312486,
+                    "sd": 18592,
+                    "v": 75231,
+                    "m": 407322,
+                    "c": 45082,
+                    "l": 116564,
+                    "kd": 68025,
+                    "ovr": 22964
+                },
+                "eligibleVoters": 1469688,
+                "participatingVoters": 1162653,
+                "validVotes": 1141103
+            },
+        },
+    },
     "2022": {
         "apoteksskogen": {
             "name": "Apoteksskogen",

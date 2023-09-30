@@ -19,17 +19,29 @@ function populateAreaList() {
 }
 
 function populateYearComparisionSelect(selectId, yearFrom, yearTo) {
-    const areaGroups = [];
+    const areaConnectionsByType = {
+        "municipalityPart": [],
+        "municipalitySubPart": [],
+        "area": []
+    };
+    //const areaGroups = [];
     for (let areaGroup of getAllAreaGroups()) {
         if (areaGroup.years.hasOwnProperty(yearFrom) && areaGroup.years.hasOwnProperty(yearTo)) {
-            areaGroups.push(areaGroup);
+            //areaGroups.push(areaGroup);
+            areaConnectionsByType[areaGroup.category].push(areaGroup);
         }
     }
-    areaGroups.sort((s1, s2) => s1.name.localeCompare(s2.name));
     let options = "";
-    for (let areaGroup of areaGroups) {
-        options += "<option value=" + areaGroup.id + ">" + areaGroup.name + "</option>";
+    for (let type of Object.keys(areaConnectionsByType)) {
+        areaConnectionsByType[type].sort((s1, s2) => s1.name.localeCompare(s2.name));
+        options += "<optgroup label='" + displayTexts[type] + "'>";
+        for (let areaGroup of areaConnectionsByType[type]) {
+            options += "<option value=" + areaGroup.id + ">" + areaGroup.name + "</option>";
+        }
+        options += "</optgroup>";
     }
+    //areaGroups.sort((s1, s2) => s1.name.localeCompare(s2.name));
+
     document.getElementById(selectId).innerHTML = options;
 }
 
@@ -273,14 +285,21 @@ function drawPartyChart() {
 
     const areaConnections = getAreaConnectionsById(selectedAreas);
 
-    const comparisionItems = ["riksdag", "region", "kommun"];
+    const levelItems = ["riksdag", "region", "kommun"];
+    const comparisionItems = getComparisionItems();
+
     const data = new google.visualization.DataTable();
     data.addColumn('string', 'År');
-    for (let item of comparisionItems) {
+    for (let item of levelItems) {
         data.addColumn('number', levelNames[item].short);
     }
+    for (let item of Object.entries(comparisionItems)) {
+        if (item[1] === true) {
+            data.addColumn('number', compareInfo[item[0]].label);
+        }
+    }
 
-    const resultRows = getPartyResultRows(areaConnections, yearEarlier, yearLater, selectedParty);
+    const resultRows = getPartyResultRows(areaConnections, yearEarlier, yearLater, selectedParty, comparisionItems);
 
     data.addRows(resultRows);
 
@@ -292,6 +311,14 @@ function drawPartyChart() {
     const partyName = partyNames[selectedParty].long;
 
     const colors = ['#f9ed06', '#7fd0e6', 'black'];
+
+    const lineStyle = [{}, {}, {}];
+
+    for (let item of Object.entries(comparisionItems)) {
+        if (item[1] === true) {
+            lineStyle.push(compareInfo[item[0]].line);
+        }
+    }
 
     var options = {
         height: 600,
@@ -307,14 +334,27 @@ function drawPartyChart() {
             titleTextStyle: {italic: false},
             format:'#,##0%'
         },
-        colors: colors
+        colors: colors,
+        series: lineStyle
     };
 
     var chart = new google.visualization.LineChart(document.getElementById('party-chart'));
     chart.draw(data, options);
 }
 
-function getPartyResultRows(areaConnections, yearEarlier, yearLater, party) {
+function getComparisionItems() {
+    return {
+        riksdagVasby: document.getElementById("riksdag-vasby").checked,
+        riksdagSthlmLan: document.getElementById("riksdag-sthlm-lan").checked,
+        riksdagRiket: document.getElementById("riksdag-riket").checked,
+        regionVasby: document.getElementById("region-vasby").checked,
+        regionSthlm: document.getElementById("region-sthlm").checked,
+        kommunVasby: document.getElementById("kommun-vasby").checked,
+
+    }; 
+}
+
+function getPartyResultRows(areaConnections, yearEarlier, yearLater, party, comparisionItems) {
     const areaConnection = areaConnections[0];
     const includedYears = [];
     for(let i = parseInt(yearEarlier); i <= parseInt(yearLater); i += 4) {
@@ -322,18 +362,37 @@ function getPartyResultRows(areaConnections, yearEarlier, yearLater, party) {
     }
     const dataRows = [];
     for(let year of includedYears) {
-        dataRows.push(getPartyResultRow(areaConnection.years[year.toString()], party, year));
+        dataRows.push(getPartyResultRow(areaConnection.years[year.toString()], party, year, comparisionItems));
     }
     return dataRows;
 }
 
-function getPartyResultRow(selectedAreas, party, year) {
+function getPartyResultRow(selectedAreas, party, year, comparisionItems) {
     let dataRow = [];
     dataRow.push(year.toString());
     const result = calculateTotalResult2(selectedAreas, party, year.toString());
     for (let item of ["riksdag", "region", "kommun"]) {
         dataRow.push(result[item] / result.validVotes[item]);
     }
+    if (comparisionItems.riksdagVasby) {
+        dataRow.push(getMunicipalityYearLevelPartyResult(year, "riksdag", party) / getMunicipalityYearLevelValidVotes(year, "riksdag"));
+    }
+    if (comparisionItems.riksdagSthlmLan) {
+        dataRow.push(getStockholmsLanResult(year, party) / getStockholmsLanValidVotes(year));
+    }
+    if (comparisionItems.riksdagRiket) {
+        dataRow.push(getCountryResult(year, party) / getCountryValidVotes(year));
+    }
+    if (comparisionItems.regionVasby) {
+        dataRow.push(getMunicipalityYearLevelPartyResult(year, "region", party) / getMunicipalityYearLevelValidVotes(year, "region"));
+    }
+    if (comparisionItems.regionSthlm) {
+        dataRow.push(getRegionStockholmResult(year, party) / getRegionStockholmValidVotes(year));
+    }
+    if (comparisionItems.kommunVasby) {
+        dataRow.push(getMunicipalityYearLevelPartyResult(year, "kommun", party) / getMunicipalityYearLevelValidVotes(year, "kommun"));
+    }
+
     return dataRow;
 }
 
@@ -342,7 +401,6 @@ function calculateTotalResult2(selectedAreas, party, year) {
         validVotes: {}
     };
 
-    //const partyList = level !== "kommun" ? partyListingOrder.riksdag2022 : partyListingOrder.kommun2022;
     for (let item of ["riksdag", "region", "kommun"]) {
         resultTotal[item] = 0;
         resultTotal.validVotes[item] = 0;

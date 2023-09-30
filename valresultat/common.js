@@ -70,6 +70,43 @@ const levelNames = {
     }
 }
 
+const colorKommun = "black";
+const colorRegion = "#7fd0e6";
+const colorRiksdag = "#f9ed06";
+
+const compareInfo = {
+    riksdagVasby: {
+        label: "Riksdag - Upplands Väsby",
+        line: {color: colorRiksdag, lineDashStyle: [2, 2]},
+    },
+    riksdagSthlmLan: {
+        label: "Riksdag - Valkrets Stockholms län",
+        line: {color: colorRiksdag, lineDashStyle: [5, 5]},
+    },
+    riksdagRiket: {
+        label: "Riksdag - riket",
+        line: {color: colorRiksdag, lineDashStyle: [10, 10]},
+    },
+    regionVasby: {
+        label: "Region - Upplands Väsby",
+        line: {color: colorRegion, lineDashStyle: [2, 2]},
+    },
+    regionSthlm: {
+        label: "Region - Stockholm",
+        line: {color: colorRegion, lineDashStyle: [10, 10]},
+    },
+    kommunVasby: {
+        label: "Kommun - Upplands Väsby",
+        line: {color: colorKommun, lineDashStyle: [2, 2]},
+    },
+};
+
+const displayTexts = {
+    "municipalityPart": "Kommundelar",
+    "municipalitySubPart": "Kommunsubdelar",
+    "area": "Valdistrikt"
+};
+
 function populateAreaSelect(selectId, year) {
     let options = "";
     for(let area of Object.keys(data[year])) {

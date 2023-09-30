@@ -54,8 +54,24 @@
         <div id="info"></div>
         <div id="area-chart"></div>
 
-        <select id="party-select" class="large-select" onchange="drawPartyChart()">
-        </select>
+        <select id="party-select" class="large-select" onchange="drawPartyChart()"></select>
+
+        <fieldset>
+            <legend>Jämför med partiets resultat</legend>
+            <div>
+                <label><input type="checkbox" id="riksdag-vasby" onchange="drawPartyChart()">Riksdag - Upplands Väsby</label>
+                <label><input type="checkbox" id="riksdag-sthlm-lan" onchange="drawPartyChart()">Riksdag - Valkrets Stockholms län</label>
+                <label><input type="checkbox" id="riksdag-riket" onchange="drawPartyChart()">Riksdag - riket</label>
+            </div>
+            <div>
+                <label><input type="checkbox" id="region-vasby" onchange="drawPartyChart()">Region - Upplands Väsby</label>
+                <label><input type="checkbox" id="region-sthlm" onchange="drawPartyChart()">Region - Stockholm</label>
+            </div>
+            <div>
+                <label><input type="checkbox" id="kommun-vasby" onchange="drawPartyChart()">Kommun - Upplands Väsby</label>
+            </div>
+        </fieldset>
+
         <div id="party-chart"></div>
 
         <script>

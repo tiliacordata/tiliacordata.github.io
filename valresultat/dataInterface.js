@@ -27,6 +27,38 @@ function getAreaName(area, year) {
     return data[year][area].name;
 }
 
+function getMunicipalityYearLevelPartyResult(year, level, party) {
+    return data.municipalityTotal[year][level].result[party];
+}
+
+function getMunicipalityYearLevelValidVotes(year, level) {
+    return data.municipalityTotal[year][level].validVotes;
+}
+
+function getCountryResult(year, party) {
+    return data.countryTotal[year].riksdag.result[party];
+}
+
+function getCountryValidVotes(year) {
+    return data.countryTotal[year].riksdag.validVotes;
+}
+
+function getStockholmsLanResult(year, party) {
+    return data.stockholmsLanTotal[year].riksdag.result[party];
+}
+
+function getStockholmsLanValidVotes(year) {
+    return data.stockholmsLanTotal[year].riksdag.validVotes;
+}
+
+function getRegionStockholmResult(year, party) {
+    return data.regionStockholmTotal[year].region.result[party];
+}
+
+function getRegionStockholmValidVotes(year) {
+    return data.regionStockholmTotal[year].region.validVotes;
+}
+
 function getAllAreaGroups() {
     return areaYearConnections;
 }
